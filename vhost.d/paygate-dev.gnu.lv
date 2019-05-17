@@ -1,0 +1,31 @@
+## Start of configuration add by letsencrypt container
+location ^~ /.well-known/acme-challenge/ {
+    auth_basic off;
+    auth_request off;
+    allow all;
+    root /usr/share/nginx/html;
+    try_files $uri =404;
+    break;
+}
+## End of configuration add by letsencrypt container
+location ~ /receivers {
+        deny all;
+        return 403;
+}
+location ~ /customers {
+        limit_except POST { deny all; }
+	#proxy_pass http://paygate-dev.deathathletic.com:8087;
+	      }
+location ~ /transfers {
+        limit_except POST { deny all; }
+      	proxy_pass http://paygate-dev.deathathletic.com;
+}
+# location ^~ /(depositories|originators|tranfers) {
+# 	limit_except POST {
+# 	      deny all;
+# 	}
+# 	proxy_pass http://paygate-dev.deathathletic.com;
+# 	#auth_basic	"Restricted paygate-dev.deathathletic.com";
+# 	#auth_basic_user_file	/etc/nginx/htpasswd/paygate-dev.deathathletic.com;
+
+# }
